@@ -7,13 +7,16 @@ import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequiredArgsConstructor
-public class CouponController implements CouponControllerInterface{
+@RestController
+public class CouponController {
     private final CouponService couponService;
 
-    @Override
+    @PostMapping("/coupons")
     public ResponseEntity<CouponResponse> create(CouponCreateRequest couponCreateRequest) {
         // 1. 로직 시작 시간 측정
         //long start = System.currentTimeMillis();
