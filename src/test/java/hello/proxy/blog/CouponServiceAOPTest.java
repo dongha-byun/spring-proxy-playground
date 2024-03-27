@@ -30,7 +30,7 @@ public class CouponServiceAOPTest {
     @Test
     @DisplayName("모든 내용을 포함시킨 포인트컷 - 접근제어자 / 선언타입(패키지경로) / 예외 패턴 모두 포함") // 보류!! 왜안됨 ㅠ
     void all_matches_pointcut_include_all_pattern() {
-        pointcut.setExpression("execution(public void hello.proxy.blog.CouponService.delete(String) IOException)");
+        pointcut.setExpression("execution(public void hello.proxy.blog.CouponService.delete(Long) throws java.io.IOException)");
         assertThat(pointcut.matches(delete, CouponService.class)).isTrue();
     }
 
@@ -201,4 +201,21 @@ public class CouponServiceAOPTest {
         assertThat(pointcut.matches(find, CouponService.class)).isFalse();
     }
 
+    @Test
+    @DisplayName("bean : 스프링 빈의 이름으로 매칭. 스프링에서만 사용 가능한 표현식")
+    void bean_matches_pointcut() {
+        pointcut.setExpression("bean(CouponService)");
+
+        assertThat(pointcut.matches(delete, CouponService.class)).isTrue();
+        assertThat(pointcut.matches(find, CouponService.class)).isTrue();
+    }
+
+    @Test
+    @DisplayName("bean : 이름에 패턴을 넣어 매치시킬 수 있음")
+    void bean_pattern_matches_pointcut() {
+        pointcut.setExpression("bean(*Service)");
+
+        assertThat(pointcut.matches(delete, CouponService.class)).isTrue();
+        assertThat(pointcut.matches(find, CouponService.class)).isTrue();
+    }
 }
